@@ -140,3 +140,19 @@ PVOID supGetTokenInfo(
 BOOL supGetImageVersionInfo(
     _In_ PWSTR lpFileName,
     _In_ PSUP_VERINFO_NUMBERS VersionNumbers);
+
+BOOL supCallDriver(
+    _In_ HANDLE DeviceHandle,
+    _In_ ULONG IoControlCode,
+    _In_ PVOID InputBuffer,
+    _In_ ULONG InputBufferLength,
+    _In_opt_ PVOID OutputBuffer,
+    _In_opt_ ULONG OutputBufferLength);
+
+ULONG supGetTimeAsSecondsSince1970();
+
+PVOID supVirtualAlloc(
+    _In_ SIZE_T Size);
+
+BOOL supVirtualFree(
+    _In_ PVOID Memory);

@@ -89,6 +89,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="drvhelper.c" />
     <ClCompile Include="drvmap.c" />
     <ClCompile Include="idrv\nal.c" />
     <ClCompile Include="main.c" />
@@ -102,23 +103,28 @@
     <ClCompile Include="minirtl\_strlen.c" />
     <ClCompile Include="minirtl\_strncpy.c" />
     <ClCompile Include="sup.c" />
+    <ClCompile Include="tinyaes\aes.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="consts.h" />
+    <ClInclude Include="drvhelper.h" />
     <ClInclude Include="drvmap.h" />
     <ClInclude Include="global.h" />
     <ClInclude Include="idrv\nal.h" />
     <ClInclude Include="minirtl\cmdline.h" />
     <ClInclude Include="minirtl\minirtl.h" />
     <ClInclude Include="minirtl\rtltypes.h" />
+    <ClInclude Include="ntdll\halamd64.h" />
     <ClInclude Include="ntdll\ntos.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="sup.h" />
+    <ClInclude Include="tinyaes\aes.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="drv\ene64drv.sys" />
     <None Include="drv\iQVM64.sys" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

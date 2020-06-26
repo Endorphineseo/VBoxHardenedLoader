@@ -1573,3 +1573,139 @@ BOOL supGetImageVersionInfo(
     SetLastError(dwError);
     return bResult;
 }
+
+/*
+* supCallDriver
+*
+* Purpose:
+*
+* Call driver.
+*
+*/
+BOOL supCallDriver(
+    _In_ HANDLE DeviceHandle,
+    _In_ ULONG IoControlCode,
+    _In_ PVOID InputBuffer,
+    _In_ ULONG InputBufferLength,
+    _In_opt_ PVOID OutputBuffer,
+    _In_opt_ ULONG OutputBufferLength)
+{
+    BOOL bResult = FALSE;
+    IO_STATUS_BLOCK ioStatus;
+
+    printf_s("-> %s(%p, %lu, InputBuffer, %lu, OutputBuffer, %lu)\r\n",
+        __FUNCTION__, DeviceHandle, IoControlCode, InputBufferLength, OutputBufferLength);
+
+    NTSTATUS ntStatus = NtDeviceIoControlFile(DeviceHandle,
+        NULL,
+        NULL,
+        NULL,
+        &ioStatus,
+        IoControlCode,
+        InputBuffer,
+        InputBufferLength,
+        OutputBuffer,
+        OutputBufferLength);
+
+    printf_s("%s return IO_STATUS_BLOCK: Information %llx, Status %lx\r\n", __FUNCTION__, ioStatus.Information, ioStatus.Status);
+
+    if (!NT_SUCCESS(ioStatus.Status))
+        printf_s("->! supCallDriver unsuccesful\r\n");
+
+
+    bResult = NT_SUCCESS(ntStatus);
+    SetLastError(RtlNtStatusToDosError(ntStatus));
+    return bResult;
+}
+
+/*
+* supGetTimeAsSecondsSince1970
+*
+* Purpose:
+*
+* Return seconds since 1970.
+*
+*/
+ULONG supGetTimeAsSecondsSince1970()
+{
+    LARGE_INTEGER fileTime;
+    ULONG seconds = 0;
+
+    GetSystemTimeAsFileTime((PFILETIME)&fileTime);
+    RtlTimeToSecondsSince1970(&fileTime, &seconds);
+    return seconds;
+}
+
+/*
+* supVirtualAlloc
+*
+* Purpose:
+*
+* Wrapper for NtAllocateVirtualMemory.
+*
+*/
+PVOID supVirtualAllocEx(
+    _In_ SIZE_T Size,
+    _In_ ULONG AllocationType,
+    _In_ ULONG Protect)
+{
+    NTSTATUS Status;
+    PVOID Buffer = NULL;
+    SIZE_T size;
+
+    size = Size;
+    Status = NtAllocateVirtualMemory(
+        NtCurrentProcess(),
+        &Buffer,
+        0,
+        &size,
+        AllocationType,
+        Protect);
+
+    if (NT_SUCCESS(Status)) {
+        return Buffer;
+    }
+
+    SetLastError(RtlNtStatusToDosError(Status));
+    return NULL;
+}
+
+/*
+* supVirtualAlloc
+*
+* Purpose:
+*
+* Wrapper for supVirtualAllocEx.
+*
+*/
+PVOID supVirtualAlloc(
+    _In_ SIZE_T Size)
+{
+    return supVirtualAllocEx(Size, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+}
+
+/*
+* supVirtualFree
+*
+* Purpose:
+*
+* Wrapper for NtFreeVirtualMemory.
+*
+*/
+BOOL supVirtualFree(
+    _In_ PVOID Memory)
+{
+    NTSTATUS Status = STATUS_UNSUCCESSFUL;
+    SIZE_T size = 0;
+
+    if (Memory) {
+        Status = NtFreeVirtualMemory(
+            NtCurrentProcess(),
+            &Memory,
+            &size,
+            MEM_RELEASE);
+    }
+
+    SetLastError(RtlNtStatusToDosError(Status));
+    return NT_SUCCESS(Status);
+}

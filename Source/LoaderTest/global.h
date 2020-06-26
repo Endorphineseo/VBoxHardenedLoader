@@ -40,6 +40,7 @@
 #include "sup.h"
 #include "drvmap.h"
 #include "idrv/nal.h"
+#include "drvhelper.h"
 #include "resource.h"
 
 #define T_PRNTDEFAULT   "%s\r\n"
@@ -47,3 +48,4 @@
 #pragma comment(lib, "version.lib")
 
 extern ULONG_PTR g_MaximumUserModeAddress;
+

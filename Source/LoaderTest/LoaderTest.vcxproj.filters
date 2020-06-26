@@ -16,6 +16,9 @@
     <Filter Include="minirtl">
       <UniqueIdentifier>{b58a11e6-cee3-440c-b649-1f7da9d85784}</UniqueIdentifier>
     </Filter>
+    <Filter Include="tinyaes">
+      <UniqueIdentifier>{b293100a-37dc-48e3-967e-747b0e098a1e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="minirtl\_strcat.c">
@@ -57,6 +60,12 @@
     <ClCompile Include="main.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="tinyaes\aes.c">
+      <Filter>tinyaes</Filter>
+    </ClCompile>
+    <ClCompile Include="drvhelper.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="minirtl\cmdline.h">
@@ -89,6 +98,15 @@
     <ClInclude Include="drvmap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="tinyaes\aes.h">
+      <Filter>tinyaes</Filter>
+    </ClInclude>
+    <ClInclude Include="ntdll\halamd64.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="drvhelper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc">
@@ -97,5 +115,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="drv\iQVM64.sys" />
+    <None Include="drv\ene64drv.sys" />
   </ItemGroup>
 </Project>
