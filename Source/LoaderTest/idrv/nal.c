@@ -146,6 +146,20 @@ BOOL NalUnmapAddress(
     return bResult;
 }
 
+BOOL NalEnableDbgPrint(
+    _In_ HANDLE DeviceHandle,
+    _In_ BOOLEAN Enable
+)
+{
+    NAL_ENABLE_DEBUGPRING request;
+
+    RtlSecureZeroMemory(&request, sizeof(request));
+    request.Header.FunctionId = NAL_FUNCID_ENABLEDBGPRINT;
+    request.Enable = Enable;
+    return NalCallDriver(DeviceHandle, &request, sizeof(request));
+}
+
+
 /*
 * NalVirtualToPhysical
 *

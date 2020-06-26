@@ -572,6 +572,13 @@ BOOL TestRead()
         return FALSE;
     }
 
+    if (NalEnableDbgPrint(providerHandle, TRUE)) {
+        printf_s("LDR: Debug print enabled for Intel Nal\r\n");
+    }
+    else {
+        printf_s("[!] Could not enable debug print for Intel Nal\r\n");
+    }
+
     RtlZeroMemory(&fileObject, sizeof(fileObject));
     RtlZeroMemory(&deviceObject, sizeof(deviceObject));
 

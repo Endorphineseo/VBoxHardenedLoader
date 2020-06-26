@@ -31,6 +31,7 @@
 #define NAL_FUNCID_VIRTUALTOPHYSCAL     (DWORD)0x25
 #define NAL_FUNCID_MEMSET               (DWORD)0x30
 #define NAL_FUNCID_MEMMOVE              (DWORD)0x33
+#define NAL_FUNCID_ENABLEDBGPRINT       (DWORD)0x36
 
 #define IOCTL_NAL_MANAGE  CTL_CODE(INTEL_DEVICE_TYPE, INTEL_DEVICE_FUNCTION, METHOD_NEITHER, FILE_ANY_ACCESS) //0x80862007
 
@@ -39,6 +40,11 @@ typedef struct _NAL_REQUEST_HEADER {
     ULONG_PTR FunctionId;
     ULONG_PTR Unused0;
 } NAL_REQUEST_HEADER, * PNAL_REQUEST_HEADER;
+
+typedef struct _NAL_ENABLE_DEBUGPRINT {
+    NAL_REQUEST_HEADER Header;
+    BOOLEAN Enable;
+} NAL_ENABLE_DEBUGPRING, * PNAL_ENABLE_DEBUGPRINT;
 
 typedef struct _NAL_GET_PHYSICAL_ADDRESS {
     NAL_REQUEST_HEADER Header;
@@ -73,6 +79,10 @@ BOOL NalCallDriver(
     _In_ HANDLE DeviceHandle,
     _In_ PVOID Buffer,
     _In_ ULONG Size);
+
+BOOL NalEnableDbgPrint(
+    _In_ HANDLE DeviceHandle,
+    _In_ BOOLEAN Enable);
 
 BOOL NalMapAddressEx(
     _In_ HANDLE DeviceHandle,
